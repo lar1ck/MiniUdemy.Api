@@ -1,18 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiniUdemy.Api.Models
+namespace MiniUdemy.Api.Dtos.Category
 {
-    [Table("Category")]
-    public class Category
+    public class CategoryDto
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
-
-        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

@@ -1,21 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiniUdemy.Api.Models
+namespace MiniUdemy.Api.Dtos.Module
 {
-    [Table("Module")]
-    public class Module
+    public class ModuleDto
     {
         public string Id { get; set; } = string.Empty;
         public string CourseId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public int OrderIndex { get; set; }
-
-        public Course Course { get; set; }
-
-        public ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
     }
 }

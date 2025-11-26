@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using MiniUdemy.Api.Enums;
 
-namespace MiniUdemy.Api.Models
+namespace MiniUdemy.Api.Dtos.Lesson
 {
-    [Table("Lesson")]
-    public class Lesson
+    public class LessonDto
     {
         public string Id { get; set; } = string.Empty;
         public string ModuleId { get; set; } = string.Empty;
@@ -18,9 +16,5 @@ namespace MiniUdemy.Api.Models
         public string? TextContent { get; set; }
         public int OrderIndex { get; set; }
         public TimeSpan Duration { get; set; }
-
-        public Module Module { get; set; }
-
-        public ICollection<LessonProgress> LessonProgresses { get; set; } = new List<LessonProgress>();
     }
 }

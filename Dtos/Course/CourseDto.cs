@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiniUdemy.Api.Models
+namespace MiniUdemy.Api.Dtos.Course
 {
-    [Table("Course")]
-    public class Course
+    public class CourseDto
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
@@ -16,17 +14,9 @@ namespace MiniUdemy.Api.Models
         public string CategoryId { get; set; } = string.Empty;
         public string InstructorId { get; set; } = string.Empty;
         public bool isActive {get; set;} = true;
-        
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = null;
 
-        public Category Category { get; set; }
-        public AppUser Instructor { get; set; }
-
-        public ICollection<Module> Modules { get; set; } = new List<Module>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<Enrollment> EnrolledStudents { get; set; } = new List<Enrollment>();
     }
 }

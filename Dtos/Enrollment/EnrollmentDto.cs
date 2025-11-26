@@ -1,19 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiniUdemy.Api.Models
+namespace MiniUdemy.Api.Dtos.Enrollment
 {
-    [Table("Enrollment")]
-    public class Enrollment
+    public class EnrollmentDto
     {
         public string Id { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
         public string CourseId { get; set; } = string.Empty;
-
-        public AppUser Student { get; set; }
-        public Course Course { get; set; }
     }
 }
