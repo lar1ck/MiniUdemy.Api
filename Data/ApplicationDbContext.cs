@@ -2,26 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MiniUdemy.Api.Models;
 
 namespace MiniUdemy.Api.Data
 {
-    public class ApplicationDbContext: IdentityDbContext<AppUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions dbContext): base(dbContext)
+        public ApplicationDbContext(DbContextOptions dbContext) : base(dbContext)
         {
-            
+
         }
 
-        public DbSet<Category> Category {get; set;}
-        public DbSet<Course> Course {get; set;}
-        public DbSet<Enrollment> Enrollment {get; set;}
-        public DbSet<Lesson> Lesson {get; set;}
-        public DbSet<LessonProgress> LessonProgress {get; set;}
-        public DbSet<Module> Module {get; set;}
-        public DbSet<Review> Review {get; set;}
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<Lesson> Lesson { get; set; }
+        public DbSet<LessonProgress> LessonProgress { get; set; }
+        public DbSet<Module> Module { get; set; }
+        public DbSet<Review> Review { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,6 +40,27 @@ namespace MiniUdemy.Api.Data
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            List<IdentityRole> Roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Name = "Student",
+                    NormalizedName = "STUDENT"
+                },
+                new IdentityRole
+                {
+                    Name = "Tutor",
+                    NormalizedName = "TUTOR"
+                },
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                }
+            };
+            builder.Entity<IdentityRole>().HasData(Roles);
         }
+
     }
 }
