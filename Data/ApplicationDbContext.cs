@@ -45,16 +45,19 @@ namespace MiniUdemy.Api.Data
             {
                 new IdentityRole
                 {
+                    Id = "Student",
                     Name = "Student",
                     NormalizedName = "STUDENT"
                 },
                 new IdentityRole
                 {
+                    Id = "Tutor",
                     Name = "Tutor",
                     NormalizedName = "TUTOR"
                 },
                 new IdentityRole
                 {
+                    Id = "Admin",
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 }

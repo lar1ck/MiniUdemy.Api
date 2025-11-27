@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniUdemy.Api.Dtos.Course;
 using MiniUdemy.Api.Interface;
@@ -24,6 +25,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCourses()
         {
             var comments = await _courseRepo.GetAllAsync();

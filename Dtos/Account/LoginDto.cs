@@ -6,21 +6,14 @@ using System.Threading.Tasks;
 
 namespace MiniUdemy.Api.Dtos.Account
 {
-    public class RegisterDto
+    public class LoginDto
     {
         [Required]
         [MaxLength(20)]
         [MinLength(3)]
-        [Display(Name = "John Doe")]
-        public string Username { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "email@example.com")]
-        public string Email { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         public string Password {get; set;}
-        public string Phone { get; set; }
     }
 }
