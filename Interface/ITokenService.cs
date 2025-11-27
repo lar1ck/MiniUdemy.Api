@@ -8,6 +8,6 @@ namespace MiniUdemy.Api.Interface
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user);
+        Task<string> CreateTokenAsync(AppUser user);
     }
 }

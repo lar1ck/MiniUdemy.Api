@@ -52,12 +52,13 @@ namespace MiniUdemy.Api.Controllers
                     var addRole = await _userManager.AddToRoleAsync(user, "Admin");
                     if (addRole.Succeeded)
                     {
+                        var updatedUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
                         return Ok(new NewUserDto
                         {
                             UserName = user.UserName,
                             Email = user.Email,
                             PhoneNumber = user.PhoneNumber,
-                            Token = _tokenService.CreateToken(user)
+                            Token = await _tokenService.CreateTokenAsync(updatedUser)
                         });
                     }
                     else
@@ -99,7 +100,7 @@ namespace MiniUdemy.Api.Controllers
                     UserName = user.UserName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
-                    Token = _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateTokenAsync(user)
                 }
             );
         }

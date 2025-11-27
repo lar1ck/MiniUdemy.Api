@@ -14,7 +14,7 @@ namespace MiniUdemy.Api.Controllers
 {
     [Route("api/course")]
     [ApiController]
-    public class CourseController: ControllerBase
+    public class CourseController : ControllerBase
     {
         private readonly ICourseRepository _courseRepo;
         private readonly IMapper _mapper;
