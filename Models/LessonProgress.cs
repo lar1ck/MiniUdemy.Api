@@ -9,9 +9,9 @@ namespace MiniUdemy.Api.Models
     [Table("LessonProgress")]
     public class LessonProgress
     {
-        public string Id { get; set; } = string.Empty;
-        public string UserId { get; set; }  = string.Empty;
-        public string LessonId { get; set; }  = string.Empty;
+        public int Id { get; set; } 
+        public string UserId { get; set; } = string.Empty;
+        public int LessonId { get; set; } 
         public bool IsComplete { get; set; }
         public DateTime CompletedAt { get; set; }
 

@@ -10,8 +10,8 @@ namespace MiniUdemy.Api.Models
     [Table("Lesson")]
     public class Lesson
     {
-        public string Id { get; set; } = string.Empty;
-        public string ModuleId { get; set; } = string.Empty;
+        public int Id { get; set; } 
+        public int ModuleId { get; set; }
         public string Title { get; set; } = string.Empty;
         public ContentTypeEnum ContentType { get; set; }
         public string? VideoUrl { get; set; }

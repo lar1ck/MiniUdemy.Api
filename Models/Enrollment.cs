@@ -9,9 +9,9 @@ namespace MiniUdemy.Api.Models
     [Table("Enrollment")]
     public class Enrollment
     {
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; } 
         public string UserId { get; set; } = string.Empty;
-        public string CourseId { get; set; } = string.Empty;
+        public int CourseId { get; set; } 
 
         public AppUser Student { get; set; }
         public Course Course { get; set; }

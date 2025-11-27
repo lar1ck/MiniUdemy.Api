@@ -7,7 +7,7 @@ namespace MiniUdemy.Api.Dtos.Enrollment
 {
     public class EnrollmentDto
     {
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
         public string CourseId { get; set; } = string.Empty;
     }

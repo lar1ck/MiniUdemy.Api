@@ -9,12 +9,12 @@ namespace MiniUdemy.Api.Models
     [Table("Course")]
     public class Course
     {
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; } 
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Thumbnail { get; set; } = string.Empty;
-        public string CategoryId { get; set; } = string.Empty;
-        public string InstructorId { get; set; } = string.Empty;
+        public int CategoryId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         public bool isActive {get; set;} = true;
         
         [Column(TypeName = "decimal(18,2)")]

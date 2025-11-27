@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,57 @@ namespace MiniUdemy.Api.Controllers
 
                 if (createUser.Succeeded)
                 {
-                    var addRole = await _userManager.AddToRoleAsync(user, "Admin");
+                    var addRole = await _userManager.AddToRoleAsync(user, "Student");
+                    if (addRole.Succeeded)
+                    {
+                        var updatedUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+                        return Ok(new NewUserDto
+                        {
+                            UserName = user.UserName,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber,
+                            Token = await _tokenService.CreateTokenAsync(updatedUser)
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(500, addRole.Errors);
+                    }
+                }
+                else
+                {
+                    return StatusCode(500, createUser.Errors);
+                }
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, new {message = "Something went wrong", err = e.Message});
+            }
+
+        }
+
+        [HttpPost("register-account")]
+        [Authorize(Roles = ("Admin"))]
+        public async Task<IActionResult> RegisterTeacher([FromBody] RegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var user = new AppUser
+                {
+                    UserName = registerDto.Username,
+                    Email = registerDto.Email,
+                    PhoneNumber = registerDto.Phone
+                };
+
+                var createUser = await _userManager.CreateAsync(user, registerDto.Password);
+
+                if (createUser.Succeeded)
+                {
+                    var addRole = await _userManager.AddToRoleAsync(user, registerDto.Role);
                     if (addRole.Succeeded)
                     {
                         var updatedUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
