@@ -28,9 +28,31 @@ namespace MiniUdemy.Api.Controllers
         [Authorize]
         public async Task<IActionResult> GetAllCourses()
         {
-            var comments = await _courseRepo.GetAllAsync();
-            var cleanComments = _mapper.Map<List<CourseDto>>(comments);
-            return Ok(cleanComments);
+            var courses = await _courseRepo.GetAllAsync();
+            var cleanCourses = _mapper.Map<List<CourseDto>>(courses);
+            return Ok(cleanCourses);
         }
+
+        [HttpGet("{id:int}")]
+        [Authorize]
+        public async Task<IActionResult> GetCourse([FromRoute] int id)
+        {
+            var course = await _courseRepo.GetByIdAsync(id);
+            if(course == null) return NotFound("Course doesn't exist");
+            return Ok(_mapper.Map<CourseDto>(course));
+        }
+
+        // [HttpPost("create")]
+        // [Authorize(Roles = ("Admin, Tutor"))]
+        // public async Task<IActionResult> CreateCourse([FromBody] CreateCourseDto courseData)
+        // {
+        //     if(!ModelState.IsValid) return BadRequest(ModelState);
+
+        //     var courseModel = _mapper.Map<Course>(courseData);
+        //     courseData.
+        //     await _courseRepo.CreateAsync(courseModel);
+
+        //     return CreatedAtAction(nameof(GetCourse), new {id = courseModel.Id}, _mapper.Map<CourseDto>(courseModel));
+        // }
     }
 }

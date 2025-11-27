@@ -16,10 +16,23 @@ namespace MiniUdemy.Api.Repository
         {
             _context = context;
         }
+
+        public async Task<Course> CreateAsync(Course data)
+        {
+            await _context.Course.AddAsync(data);
+            await _context.SaveChangesAsync();
+            return data;
+        }
+
         public async Task<List<Course>> GetAllAsync()
         {
             return await _context.Course.ToListAsync();
 
+        }
+
+        public async Task<Course?> GetByIdAsync(int id)
+        {
+            return await _context.Course.FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

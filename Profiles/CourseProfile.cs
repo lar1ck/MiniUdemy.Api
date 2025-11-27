@@ -12,7 +12,8 @@ namespace MiniUdemy.Api.Profiles
     {
         public CourseProfile()
         {
-            CreateMap<CourseDto, Course>();
+            CreateMap<CreateCourseDto, Course>();
+            CreateMap<Course, CreateCourseDto>();
         }
     }
 }
