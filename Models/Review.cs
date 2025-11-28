@@ -17,6 +17,8 @@ namespace MiniUdemy.Api.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public Course Course { get; set; }
+        
+        [ForeignKey("UserId")]
         public AppUser User { get; set; }
     }
 }

@@ -23,6 +23,8 @@ namespace MiniUdemy.Api.Models
         public DateTime? UpdatedAt { get; set; } = null;
 
         public Category Category { get; set; }
+        
+        [ForeignKey("UserId")]
         public AppUser Instructor { get; set; }
 
         public ICollection<Module> Modules { get; set; } = new List<Module>();

@@ -13,7 +13,10 @@ namespace MiniUdemy.Api.Profiles
         public CourseProfile()
         {
             CreateMap<CreateCourseDto, Course>();
-            CreateMap<Course, CreateCourseDto>();
+            CreateMap<Course, CourseDto>();
+            CreateMap<Course, DisplayCourseDto>()
+                .ForMember(des => des.Instructor, opt => opt.MapFrom(src => src.Instructor.UserName))
+                .ForMember(des => des.Category, opt => opt.MapFrom(src => src.Category.Name));
         }
     }
 }

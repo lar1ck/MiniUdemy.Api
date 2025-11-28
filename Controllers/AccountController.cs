@@ -80,7 +80,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("register-account")]
-        [Authorize(Roles = ("Admin"))]
+        // [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> RegisterTeacher([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)

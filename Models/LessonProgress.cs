@@ -15,6 +15,7 @@ namespace MiniUdemy.Api.Models
         public bool IsComplete { get; set; }
         public DateTime CompletedAt { get; set; }
 
+        [ForeignKey("UserId")]
         public AppUser Student { get; set; }
         public Lesson Lesson { get; set; }
     }

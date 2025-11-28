@@ -9,10 +9,11 @@ namespace MiniUdemy.Api.Models
     [Table("Enrollment")]
     public class Enrollment
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
-        public int CourseId { get; set; } 
+        public int CourseId { get; set; }
 
+        [ForeignKey("UserId")]
         public AppUser Student { get; set; }
         public Course Course { get; set; }
     }

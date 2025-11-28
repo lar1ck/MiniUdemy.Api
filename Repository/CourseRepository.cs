@@ -26,13 +26,13 @@ namespace MiniUdemy.Api.Repository
 
         public async Task<List<Course>> GetAllAsync()
         {
-            return await _context.Course.ToListAsync();
+            return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).ToListAsync();
 
         }
 
         public async Task<Course?> GetByIdAsync(int id)
         {
-            return await _context.Course.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }
