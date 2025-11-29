@@ -24,6 +24,17 @@ namespace MiniUdemy.Api.Repository
             return data;
         }
 
+        public async Task<Course?> DeleteAsync(int id)
+        {
+            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == id);
+
+            if(course == null) return null;
+
+            course.isActive = false;
+            await _context.SaveChangesAsync();
+            return course;
+        }
+
         public async Task<List<Course>> GetAllAsync()
         {
             return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).ToListAsync();

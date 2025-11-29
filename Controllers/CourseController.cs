@@ -65,5 +65,15 @@ namespace MiniUdemy.Api.Controllers
 
             return CreatedAtAction(nameof(GetCourse), new {id = courseModel.Id}, _mapper.Map<CourseDto>(courseModel));
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int id)
+        {
+            var result = await _courseRepo.DeleteAsync(id);
+
+            if (result == null) return NotFound("Course doesn't exist");
+
+            return NoContent();
+        }
     }
 }
