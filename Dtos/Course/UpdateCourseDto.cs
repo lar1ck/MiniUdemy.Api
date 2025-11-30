@@ -12,5 +12,7 @@ namespace MiniUdemy.Api.Dtos.Course
         public string Thumbnail { get; set; } = string.Empty;
         public string CategoryId { get; set; } = string.Empty;
         public decimal Price { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
     }
 }

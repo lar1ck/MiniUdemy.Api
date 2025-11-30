@@ -31,6 +31,7 @@ namespace MiniUdemy.Api.Repository
             if(course == null) return null;
 
             course.isActive = false;
+            course.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return course;
         }
