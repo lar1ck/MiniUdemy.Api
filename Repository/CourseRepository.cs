@@ -28,7 +28,7 @@ namespace MiniUdemy.Api.Repository
         {
             var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == id);
 
-            if(course == null) return null;
+            if (course == null) return null;
 
             course.isActive = false;
             course.UpdatedAt = DateTime.Now;
@@ -45,6 +45,23 @@ namespace MiniUdemy.Api.Repository
         public async Task<Course?> GetByIdAsync(int id)
         {
             return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Course?> UpdateAsync(Course data, int id)
+        {
+            var course = await _context.Course.Include(c => c.Instructor).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (course == null) return null;
+
+            course.Title = data.Title;
+            course.Description = data.Description;
+            course.Thumbnail = data.Thumbnail;
+            course.CategoryId = data.CategoryId;
+            course.Price = data.Price;
+            course.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return course;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MiniUdemy.Api.Interface
         Task<List<Course>> GetAllAsync();
         Task<Course?> GetByIdAsync(int id);
         Task<Course> CreateAsync(Course data);
-
+        Task<Course?> UpdateAsync(Course data, int id);
         Task<Course?> DeleteAsync(int id);
     }
 }

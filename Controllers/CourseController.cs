@@ -75,5 +75,18 @@ namespace MiniUdemy.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCourse([FromBody] UpdateCourseDto updatedata, [FromRoute] int id)
+        {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var courseModel = _mapper.Map<Course>(updatedata);
+            var result = await _courseRepo.UpdateAsync(courseModel, id);
+
+            if(result == null) return NotFound("Course doesn't exist");
+
+            return Ok(_mapper.Map<DisplayCourseDto>(result));
+        }
     }
 }
