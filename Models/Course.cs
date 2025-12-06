@@ -27,7 +27,7 @@ namespace MiniUdemy.Api.Models
         [ForeignKey("UserId")]
         public AppUser Instructor { get; set; }
 
-        public ICollection<Module> Modules { get; set; } = new List<Module>();
+        public ICollection<CModule> Modules { get; set; } = new List<CModule>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<Enrollment> EnrolledStudents { get; set; } = new List<Enrollment>();
     }

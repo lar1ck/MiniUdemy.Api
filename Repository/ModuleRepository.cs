@@ -17,9 +17,9 @@ namespace MiniUdemy.Api.Repository
         {
             _context = context;
         }
-        public async Task<List<Module>> GetAllAsync()
+        public async Task<List<CModule>> GetAllAsync()
         {
-            return await _context.Module
+            return await _context.Module.Include(m => m.Course).ToListAsync();
         }
     }
 }

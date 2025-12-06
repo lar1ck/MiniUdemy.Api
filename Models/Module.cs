@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MiniUdemy.Api.Models
 {
     [Table("Module")]
-    public class Module
+    public class CModule
     {
         public int Id { get; set; } 
         public int CourseId { get; set; }

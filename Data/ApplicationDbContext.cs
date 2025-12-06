@@ -21,7 +21,7 @@ namespace MiniUdemy.Api.Data
         public DbSet<Enrollment> Enrollment { get; set; }
         public DbSet<Lesson> Lesson { get; set; }
         public DbSet<LessonProgress> LessonProgress { get; set; }
-        public DbSet<Module> Module { get; set; }
+        public DbSet<CModule> Module { get; set; }
         public DbSet<Review> Review { get; set; }
 
 

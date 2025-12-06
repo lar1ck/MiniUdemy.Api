@@ -19,7 +19,7 @@ namespace MiniUdemy.Api.Models
         public int OrderIndex { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public Module Module { get; set; }
+        public CModule Module { get; set; }
 
         public ICollection<LessonProgress> LessonProgresses { get; set; } = new List<LessonProgress>();
     }
