@@ -8,7 +8,7 @@ namespace MiniUdemy.Api.Interface
 {
     public interface IEnrollementRepository
     {
-        Task<List<Enrollment>> GetAllAsync();
+        Task<List<Enrollment>> GetAllAsync(AppUser appUser);
         Task<Enrollment?> GetByidAsync(int id);
         Task<Enrollment?> CreateAsync(Enrollment data);
         Task<Enrollment?> DeleteAsync(AppUser appUser, int courseId);

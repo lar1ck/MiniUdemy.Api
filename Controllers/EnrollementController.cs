@@ -37,7 +37,10 @@ namespace MiniUdemy.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllEnrollements()
         {
-            var enrollements = await _enrollementRepo.GetAllAsync();
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
+            var enrollements = await _enrollementRepo.GetAllAsync(appUser);
             return Ok(_mapper.Map<List<EnrollmentDto>>(enrollements));
         }
 
@@ -51,7 +54,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("enroll")]
-        [Authorize(Roles = ("Student"))]
+        [Authorize(Roles = ("Student, Admin"))]
         public async Task<IActionResult> EnrollToCourse([FromBody] EnrollDto data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -75,7 +78,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("withdraw/{courseId:int}")]
-        [Authorize(Roles = ("Student"))]
+        [Authorize]
         public async Task<IActionResult> WithdrawFromCourse(
             [FromRoute] int courseId
         )
