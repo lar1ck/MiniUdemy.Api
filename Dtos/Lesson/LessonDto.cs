@@ -9,7 +9,7 @@ namespace MiniUdemy.Api.Dtos.Lesson
     public class LessonDto
     {
         public int Id { get; set; }
-        public string ModuleId { get; set; } = string.Empty;
+        public string Module { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public ContentTypeEnum ContentType { get; set; }
         public string? VideoUrl { get; set; }

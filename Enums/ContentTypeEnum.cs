@@ -2,7 +2,7 @@ namespace MiniUdemy.Api.Enums
 {
     public enum ContentTypeEnum
     {
-        Viedo,
+        Video,
         Article,
         Quiz
     }
