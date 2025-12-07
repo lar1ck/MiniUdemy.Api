@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniUdemy.Api.Data;
 using MiniUdemy.Api.Models;
 using MiniUdemy.Api.Interface;
+using MiniUdemy.Api.Dtos.Module;
 
 namespace MiniUdemy.Api.Repository
 {
@@ -17,9 +18,47 @@ namespace MiniUdemy.Api.Repository
         {
             _context = context;
         }
+
+        public async Task<CModule> CreateAsync(CModule data)
+        {
+            await _context.Module.AddAsync(data);
+            await _context.SaveChangesAsync();
+            return data;
+        }
+
+        public async Task<CModule?> DeleteAsync(int id)
+        {
+            var module = await _context.Module.FirstOrDefaultAsync(m => m.Id == id);
+
+            if(module == null ) return null;
+
+            _context.Module.Remove(module);
+            await _context.SaveChangesAsync();
+            return module;
+        }
+
         public async Task<List<CModule>> GetAllAsync()
         {
             return await _context.Module.Include(m => m.Course).ToListAsync();
+        }
+
+        public async Task<CModule?> GetByIdAsync(int id)
+        {
+            return await _context.Module.Include(m => m.Course).FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<CModule?> UpadteAsync(CModule data, int id)
+        {
+            var module = await _context.Module.FirstOrDefaultAsync(m => m.Id == id);
+
+            if(module == null) return null;
+
+            module.CourseId = data.CourseId;
+            module.Title = data.Title;
+            module.OrderIndex = data.OrderIndex;
+
+            await _context.SaveChangesAsync();
+            return module;
         }
     }
 }

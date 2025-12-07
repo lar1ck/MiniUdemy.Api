@@ -34,7 +34,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetAllCourses()
         {
             var courses = await _courseRepo.GetAllAsync();
@@ -43,7 +43,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetCourse([FromRoute] int id)
         {
             var course = await _courseRepo.GetByIdAsync(id);
@@ -52,7 +52,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = ("Admin, Tutor"))]
+        // [Authorize(Roles = ("Admin, Tutor"))]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseDto courseData)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);

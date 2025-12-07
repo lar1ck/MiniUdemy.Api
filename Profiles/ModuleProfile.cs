@@ -14,6 +14,8 @@ namespace MiniUdemy.Api.Profiles
         {
             CreateMap<CModule, ModuleDto>()
                 .ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course.Title));
+            CreateMap<CreateModuleDto, CModule>();
+            CreateMap<UpdateModuleDto, CModule>();
         }
     }
 }
