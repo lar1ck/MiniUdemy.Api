@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api1.Extensions;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MiniUdemy.Api.Dtos.Lesson;
@@ -17,16 +20,33 @@ namespace MiniUdemy.Api.Controllers
     {
         private readonly ILessonRepository _lessonRepo;
         private readonly IMapper _mapper;
-        public LessonController(ILessonRepository lessonRepo, IMapper mapper)
+        private readonly UserManager<AppUser> _userManager;
+        public LessonController(
+            ILessonRepository lessonRepo, 
+            IMapper mapper, 
+            UserManager<AppUser> userManager)
         {
             _lessonRepo = lessonRepo;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
-        [HttpGet]
+        [HttpGet("admin")]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> GetLessons()
         {
             var lessons = await _lessonRepo.GetAllAsync();
+            return Ok(_mapper.Map<List<LessonDto>>(lessons));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = ("Student"))]
+        public async Task<IActionResult> GetUserLessons()
+        {
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
+            var lessons = await _lessonRepo.GetUserLessonslAsync(appUser);
             return Ok(_mapper.Map<List<LessonDto>>(lessons));
         }
 

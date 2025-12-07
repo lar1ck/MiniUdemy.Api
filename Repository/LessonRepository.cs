@@ -28,7 +28,7 @@ namespace MiniUdemy.Api.Repository
         {
             var lesson = await _context.Lesson.FirstOrDefaultAsync(l => l.Id == id);
 
-            if(lesson == null) return null;
+            if (lesson == null) return null;
 
             _context.Lesson.Remove(lesson);
             await _context.SaveChangesAsync();
@@ -44,16 +44,25 @@ namespace MiniUdemy.Api.Repository
         {
             var lesson = await _context.Lesson.Include(l => l.Module).FirstOrDefaultAsync(l => l.Id == id);
 
-            if(lesson == null) return null;
+            if (lesson == null) return null;
 
             return lesson;
+        }
+
+        public async Task<List<Lesson>> GetUserLessonslAsync(AppUser appUser)
+        {
+            return await _context.Lesson
+                            .Include(l => l.Module)
+                            .ThenInclude(m => m.Course)
+                            .Where(c => c.Module.Course.EnrolledStudents.Any(e => e.UserId == appUser.Id))
+                            .ToListAsync();
         }
 
         public async Task<Lesson?> UpdateAsync(Lesson data, int id)
         {
             var lesson = await _context.Lesson.FirstOrDefaultAsync(l => l.Id == id);
 
-            if(lesson == null) return null;
+            if (lesson == null) return null;
 
             lesson.ModuleId = data.ModuleId;
             lesson.Title = data.Title;

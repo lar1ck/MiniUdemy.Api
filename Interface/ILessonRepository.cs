@@ -9,6 +9,7 @@ namespace MiniUdemy.Api.Interface
     public interface ILessonRepository
     {
         Task<List<Lesson>> GetAllAsync();
+        Task<List<Lesson>> GetUserLessonslAsync(AppUser appUser);
         Task<Lesson?> GetByIdAsync(int id);
         Task<Lesson> CreateAsync(Lesson data);
         Task<Lesson?> UpdateAsync(Lesson data, int id);

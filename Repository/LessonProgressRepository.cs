@@ -21,8 +21,8 @@ namespace MiniUdemy.Api.Repository
         public async Task<List<LessonProgress>> GetAllAsync()
         {
             return await _context.LessonProgress
-                                .Include(l => l.Lesson)
-                                .Include(l => l.Student).ToListAsync();
+                               .Include(l => l.Lesson)
+                               .Include(l => l.Student).ToListAsync();
         }
 
         public async Task<LessonProgress?> GetByIdAsync(int id)
@@ -30,16 +30,32 @@ namespace MiniUdemy.Api.Repository
             var result = await _context.LessonProgress
                                 .Include(l => l.Lesson)
                                 .Include(l => l.Student).FirstOrDefaultAsync(l => l.Id == id);
-            
-            if(result == null) return null;
+
+            if (result == null) return null;
             return result;
         }
 
-        public async Task<LessonProgress?> MarkAsDone(LessonProgress data, int id)
+        public async Task<List<LessonProgress>> GetUserAsync(AppUser appUser)
         {
-            var lesson = await _context.Lesson.FirstOrDefaultAsync(l => l.Id == id);
+            return await _context.LessonProgress
+                               .Include(l => l.Lesson)
+                               .Include(l => l.Student)
+                               .Where(l => l.UserId == appUser.Id)
+                               .ToListAsync();
+        }
 
-            if(lesson == null) return null;
+        public async Task<LessonProgress?> MarkAsDone(LessonProgress data, int id, AppUser appUser)
+        {
+            var lesson = await _context.Lesson.Include(l => l.Module).FirstOrDefaultAsync(l => l.Id == id);
+
+            if (lesson == null) return null;
+
+            var isEnrolled = await _context.Enrollment.AnyAsync(
+                                            e => e.CourseId == lesson.Module.CourseId &&
+                                            e.UserId == appUser.Id
+                                    );
+
+            if (!isEnrolled) return null;
 
             await _context.LessonProgress.AddAsync(data);
             await _context.SaveChangesAsync();

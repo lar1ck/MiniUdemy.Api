@@ -31,10 +31,21 @@ namespace MiniUdemy.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllProgress()
         {
             var result = await _lProgressRepo.GetAllAsync();
+            return Ok(_mapper.Map<List<LessonProgressDto>>(result));
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserProgress()
+        {
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+            
+            var result = await _lProgressRepo.GetUserAsync(appUser);
             return Ok(_mapper.Map<List<LessonProgressDto>>(result));
         }
 
@@ -61,9 +72,9 @@ namespace MiniUdemy.Api.Controllers
             var lessonProgressModel = _mapper.Map<LessonProgress>(data);
             lessonProgressModel.UserId = appUser.Id;
 
-            var result = await _lProgressRepo.MarkAsDone(lessonProgressModel, data.LessonId);
+            var result = await _lProgressRepo.MarkAsDone(lessonProgressModel, data.LessonId, appUser);
 
-            if (result == null) return NotFound("lesson doesn't exist");
+            if (result == null) return NotFound("lesson doesn't exist or you are not enrolled");
 
             var newLprogress = await _lProgressRepo.GetByIdAsync(lessonProgressModel.Id);
             return Ok(_mapper.Map<LessonProgressDto>(newLprogress));

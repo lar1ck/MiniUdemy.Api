@@ -10,7 +10,8 @@ namespace MiniUdemy.Api.Interface
     public interface ILessonProgressRepository
     {
         Task<List<LessonProgress>> GetAllAsync();
+        Task<List<LessonProgress>> GetUserAsync(AppUser appUser);
         Task<LessonProgress?> GetByIdAsync(int id);
-        Task<LessonProgress?> MarkAsDone(LessonProgress data, int id);
+        Task<LessonProgress?> MarkAsDone(LessonProgress data, int id, AppUser appUser);
     }
 }
