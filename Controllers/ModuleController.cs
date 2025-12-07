@@ -51,7 +51,7 @@ namespace MiniUdemy.Api.Controllers
 
             var newModule = await _moduleRepo.GetByIdAsync(result.Id);
 
-            return CreatedAtAction(nameof(GetModule), new { id = moduleData.Id }, _mapper.Map<ModuleDto>(newModule));
+            return CreatedAtAction(nameof(GetModule), new { id = result.Id }, _mapper.Map<ModuleDto>(newModule));
         }
 
         [HttpPut("update/{id:int}")]

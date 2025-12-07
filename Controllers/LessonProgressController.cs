@@ -52,7 +52,6 @@ namespace MiniUdemy.Api.Controllers
         [Authorize( Roles = ("Student"))]
         public async Task<IActionResult> MarkLessonComplete(
             [FromBody] CreateLessonProgressDto data
-            // [FromRoute] int id
         )
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);

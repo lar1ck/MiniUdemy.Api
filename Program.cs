@@ -64,7 +64,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<ILessonRepository, LessonRepository>();
 builder.Services.AddScoped<ILessonProgressRepository, LessonProgressRepository>();
-
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {
