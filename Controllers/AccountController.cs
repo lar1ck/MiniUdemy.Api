@@ -79,7 +79,7 @@ namespace MiniUdemy.Api.Controllers
 
         }
 
-        [HttpPost("register-account")]
+        [HttpPost("add-account")]
         // [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> RegisterTeacher([FromBody] RegisterDto registerDto)
         {

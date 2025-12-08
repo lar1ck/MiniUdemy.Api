@@ -36,14 +36,30 @@ namespace MiniUdemy.Api.Controllers
 
         //Later add seeing students in a course
 
-        [HttpGet]
-        [Authorize(Roles = ("Admin, Tutor"))]
+        [HttpGet("all")]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> GetAllEnrollements()
+        {
+            var enrollements = await _enrollementRepo.GetAllAsync();
+            return Ok(_mapper.Map<List<EnrollmentDto>>(enrollements));
+        }
+
+        [HttpGet("course/{id:int}")]
+        [Authorize(Roles = ("Admin, Tutor"))]
+        public async Task<IActionResult> GetEnrollementsInCourse([FromRoute] int id)
+        {
+            var enrollements = await _enrollementRepo.GetInCourseAsync(id);
+            return Ok(_mapper.Map<List<EnrollmentDto>>(enrollements));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = ("Student"))]
+        public async Task<IActionResult> GetAllUserEnrollements()
         {
             var userName = User.Getusername();
             var appUser = await _userManager.FindByNameAsync(userName);
 
-            var enrollements = await _enrollementRepo.GetAllAsync(appUser);
+            var enrollements = await _enrollementRepo.GetUserAllAsync(appUser);
             return Ok(_mapper.Map<List<EnrollmentDto>>(enrollements));
         }
 

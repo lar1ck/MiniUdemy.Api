@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api1.Extensions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MiniUdemy.Api.Dtos.Module;
 using MiniUdemy.Api.Interface;
@@ -17,14 +19,20 @@ namespace MiniUdemy.Api.Controllers
     {
         private readonly IModuleRepository _moduleRepo;
         private readonly IMapper _mapper;
-        public ModuleController(IModuleRepository moduleRepo, IMapper mapper)
+        private readonly UserManager<AppUser> _userManager;
+        public ModuleController(
+            IModuleRepository moduleRepo, 
+            IMapper mapper, 
+            UserManager<AppUser> userManager)
         {
             _moduleRepo = moduleRepo;
             _mapper = mapper;
+            _userManager = userManager;
+            
         }
 
-        [HttpGet]
-        [Authorize( Roles = ("Admin"))]
+        [HttpGet("all")]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> GetAllModules()
         {
             var modules = await _moduleRepo.GetAllAsync();
@@ -32,7 +40,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize]
+        [Authorize(Roles = ("Admin, Tutor"))]
         public async Task<IActionResult> GetModule([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -42,6 +50,19 @@ namespace MiniUdemy.Api.Controllers
             if (module == null) return NotFound("Module doesn't exist");
 
             return Ok(_mapper.Map<ModuleDto>(module));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = ("Student"))]
+        public async Task<IActionResult> GetUserModule()
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+            var module = await _moduleRepo.GetUserModulesAsync(appUser);
+
+            return Ok(_mapper.Map<List<ModuleDto>>(module));
         }
 
         [HttpPost("create")]

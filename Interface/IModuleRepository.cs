@@ -11,6 +11,7 @@ namespace MiniUdemy.Api.Interface
     public interface IModuleRepository
     {
         Task<List<CModule>> GetAllAsync();
+        Task<List<CModule>> GetUserModulesAsync(AppUser appUser);
         Task<CModule?> GetByIdAsync(int id);
         Task<CModule> CreateAsync(CModule data);
         Task<CModule?> DeleteAsync(int id);

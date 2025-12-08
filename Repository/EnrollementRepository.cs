@@ -43,11 +43,25 @@ namespace MiniUdemy.Api.Repository
             return enrollement;
         }
 
-        public async Task<List<Enrollment>> GetAllAsync(AppUser appUser)
+        public async Task<List<Enrollment>> GetUserAllAsync(AppUser appUser)
         {
             return await _context.Enrollment
                             .Include(e => e.Course)
                             .Include(e => e.Student).Where(e => e.UserId == appUser.Id).ToListAsync();
+        }
+
+        public async Task<List<Enrollment>> GetAllAsync()
+        {
+            return await _context.Enrollment
+                            .Include(e => e.Course)
+                            .Include(e => e.Student).ToListAsync();
+        }
+
+        public async Task<List<Enrollment>> GetInCourseAsync(int id)
+        {
+            return await _context.Enrollment
+                            .Include(e => e.Course)
+                            .Include(e => e.Student).Where(e => e.CourseId == id).ToListAsync();
         }
 
         public async Task<Enrollment?> GetByidAsync(int id)
