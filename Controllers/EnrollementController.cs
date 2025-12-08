@@ -34,7 +34,10 @@ namespace MiniUdemy.Api.Controllers
             _courseRepo = courseRepo;
         }
 
+        //Later add seeing students in a course
+
         [HttpGet]
+        [Authorize(Roles = ("Admin, Tutor"))]
         public async Task<IActionResult> GetAllEnrollements()
         {
             var userName = User.Getusername();
@@ -45,6 +48,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = ("Admin, Tutor"))]
         public async Task<IActionResult> GetEnrollementById([FromRoute] int id)
         {
             var enrollement = await _enrollementRepo.GetByidAsync(id);
@@ -54,7 +58,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("enroll")]
-        [Authorize(Roles = ("Student, Admin"))]
+        [Authorize(Roles = ("Student"))]
         public async Task<IActionResult> EnrollToCourse([FromBody] EnrollDto data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -78,7 +82,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("withdraw/{courseId:int}")]
-        [Authorize]
+        [Authorize(Roles = ("Student"))]
         public async Task<IActionResult> WithdrawFromCourse(
             [FromRoute] int courseId
         )

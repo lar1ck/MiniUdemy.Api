@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniUdemy.Api.Dtos.Module;
 using MiniUdemy.Api.Interface;
@@ -23,6 +24,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize( Roles = ("Admin"))]
         public async Task<IActionResult> GetAllModules()
         {
             var modules = await _moduleRepo.GetAllAsync();
@@ -30,6 +32,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetModule([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -42,6 +45,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize( Roles = ("Tutor"))]
         public async Task<IActionResult> CreateModule([FromBody] CreateModuleDto data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -55,6 +59,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPut("update/{id:int}")]
+        [Authorize( Roles = ("Tutor"))] // make suer it is the owner
         public async Task<IActionResult> UpdateModule([FromBody] UpdateModuleDto data, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -70,6 +75,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
+        [Authorize( Roles = ("Tutor"))] // make suer it is the owner
         public async Task<IActionResult> DeleteModule([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

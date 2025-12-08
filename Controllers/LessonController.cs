@@ -33,7 +33,7 @@ namespace MiniUdemy.Api.Controllers
 
         [HttpGet("admin")]
         [Authorize(Roles = ("Admin"))]
-        public async Task<IActionResult> GetLessons()
+        public async Task<IActionResult> GetAllLessons()
         {
             var lessons = await _lessonRepo.GetAllAsync();
             return Ok(_mapper.Map<List<LessonDto>>(lessons));
@@ -51,6 +51,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> GetLesson([FromRoute] int id)
         {
             var lesson = await _lessonRepo.GetByIdAsync(id);
@@ -61,6 +62,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = ("Tutor"))]
         public async Task<IActionResult> CreateLesson([FromBody] CreateLessonDto data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -74,6 +76,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPut("update/{id:int}")]
+        [Authorize(Roles = ("Tutor"))] // make sur it is the woner
         public async Task<IActionResult> UpdateLesson([FromBody] UpdateLessonDto data, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -89,6 +92,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
+        [Authorize(Roles = ("Tutor"))] // make sur it is the woner
         public async Task<IActionResult> DeleteLesson([FromRoute] int id)
         {
             var result = await _lessonRepo.DeleteAsync(id);

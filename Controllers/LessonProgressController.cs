@@ -32,6 +32,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("all")]
+        [Authorize( Roles = ("Admin"))]
         public async Task<IActionResult> GetAllProgress()
         {
             var result = await _lProgressRepo.GetAllAsync();
@@ -39,7 +40,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize( Roles = ("Student"))]
         public async Task<IActionResult> GetUserProgress()
         {
             var userName = User.Getusername();
@@ -50,6 +51,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = ("Admin"))]
         public async Task<IActionResult> GetProgressbyId([FromRoute] int id)
         {
             var result = await _lProgressRepo.GetByIdAsync(id);

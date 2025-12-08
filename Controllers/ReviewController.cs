@@ -39,6 +39,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetReview([FromRoute] int id)
         {
             var review = await _reviewRepo.GetByIdAsync(id);
@@ -68,6 +69,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
+        [Authorize(Roles = ("Student"))]
         public async Task<IActionResult> DeleteReview([FromRoute] int id)
         {
             var result = await _reviewRepo.DeleteAsync(id);
