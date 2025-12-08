@@ -17,16 +17,27 @@ namespace MiniUdemy.Api.Repository
             _context = context;
         }
 
-        public async Task<Course> CreateAsync(Course data)
+        public async Task<Course?> CreateAsync(Course data, AppUser appUser)
         {
-            await _context.Course.AddAsync(data);
-            await _context.SaveChangesAsync();
-            return data;
+            var isCourseActive = _context.Course
+                                            .Where(
+                                                c => c.UserId == appUser.Id &&
+                                                c.Title == data.Title
+                                            ).Any();
+
+            if (!isCourseActive)
+            {
+                await _context.Course.AddAsync(data);
+                await _context.SaveChangesAsync();
+                return data;
+            }
+
+            return null;
         }
 
-        public async Task<Course?> DeleteAsync(int id)
+        public async Task<Course?> DeleteAsync(int id, AppUser appUser)
         {
-            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == id);
+            var course = await _context.Course.Where(c => c.UserId == appUser.Id).FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null) return null;
 
@@ -47,9 +58,13 @@ namespace MiniUdemy.Api.Repository
             return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Course?> UpdateAsync(Course data, int id)
+        public async Task<Course?> UpdateAsync(Course data, int id, AppUser appUser)
         {
-            var course = await _context.Course.Include(c => c.Instructor).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
+            var course = await _context.Course
+                                    .Include(c => c.Instructor)
+                                    .Include(c => c.Category)
+                                    .Where(c => c.UserId == appUser.Id)
+                                    .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null) return null;
 

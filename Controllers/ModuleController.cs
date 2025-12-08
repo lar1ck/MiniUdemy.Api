@@ -80,13 +80,16 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPut("update/{id:int}")]
-        [Authorize( Roles = ("Tutor"))] // make suer it is the owner
+        [Authorize( Roles = ("Tutor"))]
         public async Task<IActionResult> UpdateModule([FromBody] UpdateModuleDto data, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
             var moduleData = _mapper.Map<CModule>(data);
-            var result = await _moduleRepo.UpadteAsync(moduleData, id);
+            var result = await _moduleRepo.UpadteAsync(moduleData, id, appUser);
 
             if (result == null) return NotFound("Module doesn't exist");
 

@@ -52,7 +52,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = ("Admin, Tutor"))]
+        [Authorize(Roles = ("Tutor"))]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseDto courseData)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -61,32 +61,39 @@ namespace MiniUdemy.Api.Controllers
 
             var courseModel = _mapper.Map<Course>(courseData);
             courseModel.UserId = appUser.Id;
-            await _courseRepo.CreateAsync(courseModel);
+            var result = await _courseRepo.CreateAsync(courseModel, appUser);
 
-            return CreatedAtAction(nameof(GetCourse), new {id = courseModel.Id}, _mapper.Map<CourseDto>(courseModel));
+            if(result == null) return BadRequest("This Course already exist");
+
+            var newCourse = await _courseRepo.GetByIdAsync(courseModel.Id);
+            return CreatedAtAction(nameof(GetCourse), new {id = courseModel.Id}, _mapper.Map<DisplayCourseDto>(newCourse));
         }
 
-        //Must be the Owner of the Course that deletes it
         [HttpDelete("{id:int}")]
         [Authorize(Roles = ("Tutor"))]
         public async Task<IActionResult> DeleteCourse([FromRoute] int id)
         {
-            var result = await _courseRepo.DeleteAsync(id);
+            var username = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
+            var result = await _courseRepo.DeleteAsync(id, appUser);
 
             if (result == null) return NotFound("Course doesn't exist");
 
             return NoContent();
         }
 
-        //Must be the Owner of the Course that updats it
         [HttpPut("update/{id}")]
         [Authorize(Roles = ("Tutor"))]
         public async Task<IActionResult> UpdateCourse([FromBody] UpdateCourseDto updatedata, [FromRoute] int id)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
+            var username = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
             var courseModel = _mapper.Map<Course>(updatedata);
-            var result = await _courseRepo.UpdateAsync(courseModel, id);
+            var result = await _courseRepo.UpdateAsync(courseModel, id, appUser);
 
             if(result == null) return NotFound("Course doesn't exist");
 

@@ -11,8 +11,8 @@ namespace MiniUdemy.Api.Interface
     {
         Task<List<Course>> GetAllAsync();
         Task<Course?> GetByIdAsync(int id);
-        Task<Course> CreateAsync(Course data);
-        Task<Course?> UpdateAsync(Course data, int id);
-        Task<Course?> DeleteAsync(int id);
+        Task<Course?> CreateAsync(Course data, AppUser appUser);
+        Task<Course?> UpdateAsync(Course data, int id, AppUser appUser);
+        Task<Course?> DeleteAsync(int id, AppUser appUser);
     }
 }

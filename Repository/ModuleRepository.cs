@@ -52,9 +52,12 @@ namespace MiniUdemy.Api.Repository
             return await _context.Module.Include(m => m.Course).Where(m => m.Course.EnrolledStudents.Any(e => e.UserId == appUser.Id)).ToListAsync();
         }
 
-        public async Task<CModule?> UpadteAsync(CModule data, int id)
+        public async Task<CModule?> UpadteAsync(CModule data, int id, AppUser appUser)
         {
-            var module = await _context.Module.FirstOrDefaultAsync(m => m.Id == id);
+            var module = await _context.Module
+                                    .Include(m => m.Course)
+                                    .Where(m => m.Course.UserId == appUser.Id)
+                                    .FirstOrDefaultAsync(m => m.Id == id);
 
             if(module == null) return null;
 
