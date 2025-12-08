@@ -22,7 +22,7 @@ namespace MiniUdemy.Api.Repository
             var isEnrolled = await _context.Enrollment.AnyAsync(r => r.UserId == data.UserId && r.CourseId == data.CourseId);
             
             if(isEnrolled) return null;
-            
+
             await _context.Enrollment.AddAsync(data);
             await _context.SaveChangesAsync();
             return data;

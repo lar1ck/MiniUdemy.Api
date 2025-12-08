@@ -99,5 +99,7 @@ namespace MiniUdemy.Api.Controllers
 
             return Ok(_mapper.Map<DisplayCourseDto>(result));
         }
+
+        // [HttpPatch]
     }
 }

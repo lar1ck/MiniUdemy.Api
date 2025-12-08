@@ -84,10 +84,10 @@ namespace MiniUdemy.Api.Controllers
             var enrollModel = _mapper.Map<Enrollment>(data);
             enrollModel.UserId = appUser.Id;
 
-            if (await _courseRepo.GetByIdAsync(data.CourseId) == null)
-            {
-                return NotFound("Course doesn't exist");
-            }
+            var course = await _courseRepo.GetByIdAsync(data.CourseId);
+            if (course == null) return NotFound("Course doesn't exist");
+
+            if(!course.isActive) return BadRequest("Course is not active");
 
             var result = await _enrollementRepo.CreateAsync(enrollModel);
 
