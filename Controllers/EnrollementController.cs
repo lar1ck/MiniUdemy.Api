@@ -34,7 +34,6 @@ namespace MiniUdemy.Api.Controllers
             _courseRepo = courseRepo;
         }
 
-        //Later add seeing students in a course
 
         [HttpGet("all")]
         [Authorize(Roles = ("Admin"))]
