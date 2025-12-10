@@ -41,6 +41,30 @@ namespace MiniUdemy.Api.Data
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Course>()
+                .HasOne(c => c.Instructor)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.EnrolledStudents)
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<LessonProgress>()
+                .HasOne(lp => lp.Student)
+                .WithMany()
+                .HasForeignKey(lp => lp.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             List<IdentityRole> Roles = new List<IdentityRole>
             {
                 new IdentityRole

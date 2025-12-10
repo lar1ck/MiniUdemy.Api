@@ -17,13 +17,28 @@ namespace MiniUdemy.Api.Repository
             _context = context;
         }
 
-        public async Task<Enrollment?> CreateAsync(Enrollment data)
+        public async Task<Enrollment?> CreateAsync(Enrollment data, AppUser appUser)
         {
             var isEnrolled = await _context.Enrollment.AnyAsync(r => r.UserId == data.UserId && r.CourseId == data.CourseId);
             
             if(isEnrolled) return null;
 
             await _context.Enrollment.AddAsync(data);
+            await _context.SaveChangesAsync();
+
+            var lessonIds = await _context.Lesson
+                                    .Where(l => l.Module.CourseId == data.CourseId)
+                                    .Select(l => l.Id)
+                                    .ToListAsync();
+            var lessonProgress = lessonIds.Select(lessonId => new LessonProgress
+            {
+                UserId = appUser.Id,
+                LessonId = lessonId,
+                IsComplete = false,
+                CompletedAt = null
+            }).ToList();
+
+            await _context.LessonProgress.AddRangeAsync(lessonProgress);
             await _context.SaveChangesAsync();
             return data;
         }

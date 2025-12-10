@@ -88,7 +88,7 @@ namespace MiniUdemy.Api.Controllers
 
             if(!course.isActive) return BadRequest("Course is not active");
 
-            var result = await _enrollementRepo.CreateAsync(enrollModel);
+            var result = await _enrollementRepo.CreateAsync(enrollModel, appUser);
 
             if (result == null) return BadRequest("You are already enrolled");
 

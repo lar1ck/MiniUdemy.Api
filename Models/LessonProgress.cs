@@ -13,7 +13,7 @@ namespace MiniUdemy.Api.Models
         public string UserId { get; set; } = string.Empty;
         public int LessonId { get; set; } 
         public bool IsComplete { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
 
         [ForeignKey("UserId")]
         public AppUser Student { get; set; }
