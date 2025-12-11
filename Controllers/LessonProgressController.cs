@@ -61,24 +61,22 @@ namespace MiniUdemy.Api.Controllers
             return Ok(_mapper.Map<LessonProgressDto>(result));
         }
 
-        [HttpPost("complete")]
+        [HttpPut("complete/{lessonId:int}")]
         [Authorize( Roles = ("Student"))]
         public async Task<IActionResult> MarkLessonComplete(
-            [FromBody] CreateLessonProgressDto data
+            [FromRoute] int lessonId
         )
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
             var userName = User.Getusername();
             var appUser = await _userManager.FindByNameAsync(userName);
-            var lessonProgressModel = _mapper.Map<LessonProgress>(data);
-            lessonProgressModel.UserId = appUser.Id;
 
-            var result = await _lProgressRepo.MarkAsDone(lessonProgressModel, data.LessonId, appUser);
+            var result = await _lProgressRepo.MarkAsDone(lessonId, appUser);
 
-            if (result == null) return NotFound("lesson doesn't exist or you are not enrolled");
+            if (result == null) return NotFound("lesson doesn't exist");
 
-            var newLprogress = await _lProgressRepo.GetByIdAsync(lessonProgressModel.Id);
+            var newLprogress = await _lProgressRepo.GetByIdAsync(result.Id);
             return Ok(_mapper.Map<LessonProgressDto>(newLprogress));
         }
     }

@@ -61,5 +61,18 @@ namespace MiniUdemy.Api.Repository
             await _context.SaveChangesAsync();
             return data;
         }
+
+        public async Task<LessonProgress?> MarkAsDone(int lessonId, AppUser appUser)
+        {
+            var lessonProgress = await _context.LessonProgress.Where(lp => lp.UserId == appUser.Id && lp.LessonId == lessonId).FirstOrDefaultAsync();
+
+            if(lessonProgress == null) return null;
+
+            lessonProgress.IsComplete = true;
+            lessonProgress.CompletedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return lessonProgress;
+        }
     }
 }
