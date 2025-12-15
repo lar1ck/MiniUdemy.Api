@@ -24,6 +24,7 @@ namespace MiniUdemy.Api.Repository
 
             if(course == null) return null;
 
+            data.CreatedAt = DateTime.Now;
             await _context.Review.AddAsync(data);
             await _context.SaveChangesAsync();
             return data;
@@ -54,6 +55,17 @@ namespace MiniUdemy.Api.Repository
             if (review == null) return null;
 
             return review;
+        }
+
+        public bool HasIncompleteLessons(AppUser appUser, int courseId)
+        {
+            return _context.LessonProgress
+                                    .Include(lp => lp.Lesson)
+                                    .Where(
+                                        lp => lp.Lesson.Module.CourseId == courseId &&
+                                        lp.IsComplete == false &&
+                                        lp.UserId == appUser.Id
+                                    ).Any();
         }
     }
 }

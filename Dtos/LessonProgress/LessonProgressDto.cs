@@ -11,6 +11,6 @@ namespace MiniUdemy.Api.Dtos.LessonProgress
         public string User { get; set; } = string.Empty;  
         public string Lesson { get; set; } = string.Empty;
         public bool IsComplete { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; } = null;
     }
 }

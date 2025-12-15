@@ -13,5 +13,6 @@ namespace MiniUdemy.Api.Interface
         Task<Review?> GetByIdAsync(int id);
         Task<Review?> CreateAsync(Review data);
         Task<Review?> DeleteAsync(int id);
+        public bool HasIncompleteLessons(AppUser appUser, int courseId);
     }
 }

@@ -20,15 +20,18 @@ namespace MiniUdemy.Api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IReviewRepository _reviewRepo;
+        // private readonly ICourseRepository _courseRepo;
         public ReviewController(
            UserManager<AppUser> userManager,
            IMapper mapper,
            IReviewRepository reviewRepo
+        //    ICourseRepository courseRepo
         )
         {
             _userManager = userManager;
             _mapper = mapper;
             _reviewRepo = reviewRepo;
+            // _courseRepo = courseRepo;
         }
 
         [HttpGet]
@@ -60,9 +63,13 @@ namespace MiniUdemy.Api.Controllers
             var reviewModel = _mapper.Map<Review>(data);
             reviewModel.UserId = appuser.Id;
 
-            var result = await _reviewRepo.CreateAsync(reviewModel);
-            if (result == null) return NotFound("Course doesn't exist");
+            var canReview = _reviewRepo.HasIncompleteLessons(appuser, data.CourseId);
+            if (canReview == true) return BadRequest("You have to complete the course to give a review");
 
+            var result = await _reviewRepo.CreateAsync(reviewModel);
+            if (result == null) return NotFound("Course doesn't exist"); 
+
+            
             var newReview = await _reviewRepo.GetByIdAsync(result.Id);
 
             return CreatedAtAction(nameof(GetReview), new { id = result.Id }, _mapper.Map<ReviewDto>(newReview));
