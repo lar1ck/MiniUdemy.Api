@@ -49,6 +49,15 @@ namespace MiniUdemy.Api.Repository
             return await _context.Review.Include(r => r.Course).Include(r => r.User).ToListAsync();
         }
 
+        public async Task<List<Review>> GetByCourseIdAsync(int courseId)
+        {
+            return await _context.Review
+                                    .Include(r => r.Course)
+                                    .Include(r => r.User)
+                                    .Where(r => r.CourseId == courseId)
+                                    .ToListAsync();
+        }
+
         public async Task<Review?> GetByIdAsync(int id)
         {
             var review = await _context.Review

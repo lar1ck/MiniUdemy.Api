@@ -88,5 +88,13 @@ namespace MiniUdemy.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("/course/{id:int}")]
+        [Authorize]
+        public async Task<IActionResult> GetCourseReviews([FromRoute] int id)
+        {
+            var reviews = await _reviewRepo.GetByCourseIdAsync(id);
+            return Ok(_mapper.Map<List<ReviewDto>>(reviews));
+        }
     }
 }
