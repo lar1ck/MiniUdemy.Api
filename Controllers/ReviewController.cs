@@ -79,7 +79,10 @@ namespace MiniUdemy.Api.Controllers
         [Authorize(Roles = ("Student"))]
         public async Task<IActionResult> DeleteReview([FromRoute] int id)
         {
-            var result = await _reviewRepo.DeleteAsync(id);
+            var userName = User.Getusername();
+            var appuser = await _userManager.FindByNameAsync(userName);
+
+            var result = await _reviewRepo.DeleteAsync(appuser, id);
 
             if (result == null) return NotFound("Review doesn't exist");
 

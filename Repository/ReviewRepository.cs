@@ -22,7 +22,7 @@ namespace MiniUdemy.Api.Repository
         {
             var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == data.CourseId);
 
-            if(course == null) return null;
+            if (course == null) return null;
 
             data.CreatedAt = DateTime.Now;
             await _context.Review.AddAsync(data);
@@ -30,9 +30,12 @@ namespace MiniUdemy.Api.Repository
             return data;
         }
 
-        public async Task<Review?> DeleteAsync(int id)
+        public async Task<Review?> DeleteAsync(AppUser appUser, int id)
         {
-            var review = await _context.Review.FirstOrDefaultAsync(r => r.Id == id);
+            var review = await _context.Review.FirstOrDefaultAsync(
+                                                    r => r.Id == id && 
+                                                    r.UserId == appUser.Id
+                                                );
 
             if (review == null) return null;
 
