@@ -34,10 +34,10 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllCourses()
+        // [Authorize]
+        public async Task<IActionResult> GetAllCourses([FromQuery] CourseQueryObject query)
         {
-            var courses = await _courseRepo.GetAllAsync();
+            var courses = await _courseRepo.GetAllAsync(query);
             var cleanCourses = _mapper.Map<List<DisplayCourseDto>>(courses);
             return Ok(cleanCourses);
         }

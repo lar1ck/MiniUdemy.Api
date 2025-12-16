@@ -20,18 +20,15 @@ namespace MiniUdemy.Api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IReviewRepository _reviewRepo;
-        // private readonly ICourseRepository _courseRepo;
         public ReviewController(
            UserManager<AppUser> userManager,
            IMapper mapper,
            IReviewRepository reviewRepo
-        //    ICourseRepository courseRepo
         )
         {
             _userManager = userManager;
             _mapper = mapper;
             _reviewRepo = reviewRepo;
-            // _courseRepo = courseRepo;
         }
 
         [HttpGet]

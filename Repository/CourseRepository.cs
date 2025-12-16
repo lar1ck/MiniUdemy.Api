@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiniUdemy.Api.Data;
+using MiniUdemy.Api.Dtos.Course;
 using MiniUdemy.Api.Interface;
 using MiniUdemy.Api.Models;
 
@@ -47,9 +48,47 @@ namespace MiniUdemy.Api.Repository
             return course;
         }
 
-        public async Task<List<Course>> GetAllAsync()
+        public async Task<List<Course>> GetAllAsync(CourseQueryObject query)
         {
-            return await _context.Course.Include(c => c.Instructor).Include(c => c.Category).ToListAsync();
+            var courses = _context.Course
+                                        .Include(c => c.Instructor)
+                                        .Include(c => c.Category)
+                                        .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Category))
+            {
+                courses = courses.Where(c => c.Category.Name == query.Category);
+            }
+            if (!string.IsNullOrWhiteSpace(query.Title))
+            {
+                courses = courses.Where(c => c.Title == query.Title);
+            }
+            if (!string.IsNullOrWhiteSpace(query.Instructor))
+            {
+                courses = courses.Where(c => c.Instructor.UserName == query.Instructor);
+            }
+            if (query.CheaperThan.HasValue)
+            {
+                courses = courses.Where(c => c.Price <= query.CheaperThan);
+            }
+            if (query.HigherThan.HasValue)
+            {
+                courses = courses.Where(c => c.Price >= query.HigherThan);
+            }
+            if (query.isActive.HasValue)
+            {
+                courses = courses.Where(c => c.isActive == query.isActive);
+            }
+            if (query.CreatedBefore.HasValue)
+            {
+                courses = courses.Where(c => c.CreatedAt < query.CreatedBefore);
+            }
+            if (query.CreatedAfter.HasValue)
+            {
+                courses = courses.Where(c => c.CreatedAt > query.CreatedAfter);
+            }
+
+            return await courses.ToListAsync();
 
         }
 
