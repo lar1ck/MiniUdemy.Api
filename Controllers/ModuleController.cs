@@ -60,6 +60,8 @@ namespace MiniUdemy.Api.Controllers
 
             var userName = User.Getusername();
             var appUser = await _userManager.FindByNameAsync(userName);
+            if(appUser == null) return BadRequest("No User");
+
             var module = await _moduleRepo.GetUserModulesAsync(appUser);
 
             return Ok(_mapper.Map<List<ModuleDto>>(module));
@@ -87,6 +89,8 @@ namespace MiniUdemy.Api.Controllers
 
             var userName = User.Getusername();
             var appUser = await _userManager.FindByNameAsync(userName);
+            if(appUser == null) return BadRequest("No User");
+
 
             var moduleData = _mapper.Map<CModule>(data);
             var result = await _moduleRepo.UpadteAsync(moduleData, id, appUser);
@@ -99,12 +103,17 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        [Authorize( Roles = ("Tutor"))] // make suer it is the owner
+        [Authorize( Roles = ("Tutor"))] 
         public async Task<IActionResult> DeleteModule([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _moduleRepo.DeleteAsync(id);
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
+            if(appUser == null) return BadRequest("No User");
+
+            var result = await _moduleRepo.DeleteAsync(id, appUser);
 
             if (result == null) return NotFound("Module doesn't exist");
 

@@ -26,11 +26,11 @@ namespace MiniUdemy.Api.Repository
             return data;
         }
 
-        public async Task<CModule?> DeleteAsync(int id)
+        public async Task<CModule?> DeleteAsync(int id, AppUser appUser)
         {
-            var module = await _context.Module.FirstOrDefaultAsync(m => m.Id == id);
+            var module = await _context.Module.Include(m => m.Course).FirstOrDefaultAsync(m => m.Id == id);
 
-            if(module == null ) return null;
+            if (module == null || module.Course.UserId != appUser.Id) return null;
 
             _context.Module.Remove(module);
             await _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace MiniUdemy.Api.Repository
                                     .Where(m => m.Course.UserId == appUser.Id)
                                     .FirstOrDefaultAsync(m => m.Id == id);
 
-            if(module == null) return null;
+            if (module == null || module.Course.UserId != appUser.Id) return null;
 
             module.CourseId = data.CourseId;
             module.Title = data.Title;
