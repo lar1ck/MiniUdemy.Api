@@ -43,30 +43,15 @@ namespace MiniUdemy.Api.Repository
                                .Where(l => l.UserId == appUser.Id)
                                .ToListAsync();
         }
-
-        public async Task<LessonProgress?> MarkAsDone(LessonProgress data, int id, AppUser appUser)
-        {
-            var lesson = await _context.Lesson.Include(l => l.Module).FirstOrDefaultAsync(l => l.Id == id);
-
-            if (lesson == null) return null;
-
-            var isEnrolled = await _context.Enrollment.AnyAsync(
-                                            e => e.CourseId == lesson.Module.CourseId &&
-                                            e.UserId == appUser.Id
-                                    );
-
-            if (!isEnrolled) return null;
-
-            await _context.LessonProgress.AddAsync(data);
-            await _context.SaveChangesAsync();
-            return data;
-        }
+        
 
         public async Task<LessonProgress?> MarkAsDone(int lessonId, AppUser appUser)
         {
             var lessonProgress = await _context.LessonProgress.Where(lp => lp.UserId == appUser.Id && lp.LessonId == lessonId).FirstOrDefaultAsync();
 
             if(lessonProgress == null) return null;
+
+            if(lessonProgress.IsComplete == true) return lessonProgress;
 
             lessonProgress.IsComplete = true;
             lessonProgress.CompletedAt = DateTime.Now;
