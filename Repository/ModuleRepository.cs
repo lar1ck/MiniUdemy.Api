@@ -19,8 +19,11 @@ namespace MiniUdemy.Api.Repository
             _context = context;
         }
 
-        public async Task<CModule> CreateAsync(CModule data)
+        public async Task<CModule?> CreateAsync(CModule data, AppUser appUser)
         {
+            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == data.CourseId);
+
+            if(course == null || course.UserId != appUser.Id) return null;
             await _context.Module.AddAsync(data);
             await _context.SaveChangesAsync();
             return data;

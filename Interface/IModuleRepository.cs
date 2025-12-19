@@ -13,7 +13,7 @@ namespace MiniUdemy.Api.Interface
         Task<List<CModule>> GetAllAsync();
         Task<List<CModule>> GetUserModulesAsync(AppUser appUser);
         Task<CModule?> GetByIdAsync(int id);
-        Task<CModule> CreateAsync(CModule data);
+        Task<CModule?> CreateAsync(CModule data, AppUser appUser);
         Task<CModule?> DeleteAsync(int id, AppUser appUser);
         Task<CModule?> UpadteAsync(CModule data, int id, AppUser appUser);
     }

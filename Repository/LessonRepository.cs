@@ -17,18 +17,25 @@ namespace MiniUdemy.Api.Repository
             _context = context;
         }
 
-        public async Task<Lesson> CreateAsync(Lesson data)
+        public async Task<Lesson?> CreateAsync(Lesson data, AppUser appUser)
         {
+            var module = await _context.Module.Include(m => m.Course).FirstOrDefaultAsync(m => m.Id == data.ModuleId);
+
+            if(module == null || module.Course.UserId != appUser.Id) return null;
+
             await _context.Lesson.AddAsync(data);
             await _context.SaveChangesAsync();
             return data;
         }
 
-        public async Task<Lesson?> DeleteAsync(int id)
+        public async Task<Lesson?> DeleteAsync(int id, AppUser appUser)
         {
-            var lesson = await _context.Lesson.FirstOrDefaultAsync(l => l.Id == id);
+            var lesson = await _context.Lesson
+                                    .Include(l => l.Module)
+                                    .ThenInclude(m => m.Course)
+                                    .FirstOrDefaultAsync(l => l.Id == id);
 
-            if (lesson == null) return null;
+            if (lesson == null || lesson.Module.Course.UserId != appUser.Id) return null;
 
             _context.Lesson.Remove(lesson);
             await _context.SaveChangesAsync();
@@ -58,11 +65,14 @@ namespace MiniUdemy.Api.Repository
                             .ToListAsync();
         }
 
-        public async Task<Lesson?> UpdateAsync(Lesson data, int id)
+        public async Task<Lesson?> UpdateAsync(Lesson data, int id, AppUser appUser)
         {
-            var lesson = await _context.Lesson.FirstOrDefaultAsync(l => l.Id == id);
+            var lesson = await _context.Lesson
+                                    .Include(l => l.Module)
+                                    .ThenInclude(m => m.Course)
+                                    .FirstOrDefaultAsync(l => l.Id == id);
 
-            if (lesson == null) return null;
+            if (lesson == null || lesson.Module.Course.UserId != appUser.Id) return null;
 
             lesson.ModuleId = data.ModuleId;
             lesson.Title = data.Title;

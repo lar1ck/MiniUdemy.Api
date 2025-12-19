@@ -73,9 +73,14 @@ namespace MiniUdemy.Api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var moduleData = _mapper.Map<CModule>(data);
-            var result = await _moduleRepo.CreateAsync(moduleData);
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+            if(appUser == null) return BadRequest("No User");
 
+            var moduleData = _mapper.Map<CModule>(data);
+            var result = await _moduleRepo.CreateAsync(moduleData, appUser);
+
+            if(result == null) return BadRequest("Course Doesn't exist or unauthorized");
             var newModule = await _moduleRepo.GetByIdAsync(result.Id);
 
             return CreatedAtAction(nameof(GetModule), new { id = result.Id }, _mapper.Map<ModuleDto>(newModule));

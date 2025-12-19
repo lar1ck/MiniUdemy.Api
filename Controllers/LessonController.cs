@@ -67,8 +67,13 @@ namespace MiniUdemy.Api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+             var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
             var lessonModel = _mapper.Map<Lesson>(data);
-            var result = await _lessonRepo.CreateAsync(lessonModel);
+            var result = await _lessonRepo.CreateAsync(lessonModel, appUser);
+
+            if(result == null) return BadRequest("Module doesn't exist or unothorized");
 
             var lesson = await _lessonRepo.GetByIdAsync(result.Id);
 
@@ -76,13 +81,16 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPut("update/{id:int}")]
-        [Authorize(Roles = ("Tutor"))] // make sur it is the woner
+        [Authorize(Roles = ("Tutor"))]
         public async Task<IActionResult> UpdateLesson([FromBody] UpdateLessonDto data, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
             var lessonModel = _mapper.Map<Lesson>(data);
-            var result = await _lessonRepo.UpdateAsync(lessonModel, id);
+            var result = await _lessonRepo.UpdateAsync(lessonModel, id, appUser);
 
             if (result == null) return NotFound("Lesson doesn't exist");
 
@@ -92,10 +100,13 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        [Authorize(Roles = ("Tutor"))] // make sur it is the woner
+        [Authorize(Roles = ("Tutor"))] 
         public async Task<IActionResult> DeleteLesson([FromRoute] int id)
         {
-            var result = await _lessonRepo.DeleteAsync(id);
+            var userName = User.Getusername();
+            var appUser = await _userManager.FindByNameAsync(userName);
+
+            var result = await _lessonRepo.DeleteAsync(id, appUser);
 
             if (result == null) return NotFound("Lesson doesn't exist");
             return NoContent();
