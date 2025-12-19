@@ -31,7 +31,7 @@ namespace MiniUdemy.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAccount([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> RegisterAccount([FromBody] RegisterUserDto registerDto)
         {
             if (!ModelState.IsValid)
             {
